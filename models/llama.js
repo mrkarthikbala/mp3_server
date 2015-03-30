@@ -1,7 +1,7 @@
 // Load required packages
 var mongoose = require('mongoose');
 
-// Define our beer schema
+// Define our llama schema
 var LlamaSchema   = new mongoose.Schema({
   name: String,
   height: Number

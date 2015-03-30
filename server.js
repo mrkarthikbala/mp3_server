@@ -1,13 +1,14 @@
 // Get the packages we need
 var express = require('express');
 var mongoose = require('mongoose');
-var Llama = require('./models/llama');
 var bodyParser = require('body-parser');
 var router = express.Router();
 
-//replace this with your Mongolab URL
-mongoose.connect('mongodb://localhost/mp3');
+var User = require('./models/user');
+var Task = require('./models/task');
 
+//replace this with your Mongolab URL
+mongoose.connect('mongodb://joe:joepass@ds041140.mongolab.com:41140/karthik');
 // Create our Express application
 var app = express();
 
@@ -30,6 +31,8 @@ app.use(bodyParser.urlencoded({
 // All our routes will start with /api
 app.use('/api', router);
 
+
+
 //Default route here
 var homeRoute = router.route('/');
 
@@ -37,15 +40,228 @@ homeRoute.get(function(req, res) {
   res.json({ message: 'Hello World!' });
 });
 
-//Llama route 
-var llamaRoute = router.route('/llamas');
+//additional routes
+var userRoute = router.route('/users');
+var singleUserRoute = router.route('/users/:id');
+var taskRoute = router.route('/tasks');
+var singleTaskRoute = router.route('/tasks/:id');
 
-llamaRoute.get(function(req, res) {
-  res.json([{ "name": "alice", "height": 12 }, { "name": "jane", "height": 13 }]);
+userRoute.get(function(req, res, next){
+
+	var where = null;
+	if (req.query.where) where = JSON.parse(req.query.where);
+	var sort = null;
+	if (req.query.sort) sort = JSON.parse(req.query.sort);
+	var select = null;
+	if (req.query.select) select = JSON.parse(req.query.select);
+
+	var count = "false";
+	if (req.query.count) count = JSON.parse(req.query.count);
+
+	var done = User.find(where, select).sort(sort).skip(req.query.skip).limit(req.query.limit);
+	if (count === "true")
+		done = done.count();
+
+	done.exec(function(err, users){
+		if (err){
+			res.statusCode = 500;
+			res.send({message : "The server had an error!", data: err});
+		}
+		else{
+			res.statusCode = 200;
+			res.json({message: "OK", data: users});
+		}
+	});
 });
+userRoute.post(function(req, res,next){
+	User.create(req.body, function(err, post){
+		if (err){
+			if (err.name = 'ValidationError'){
+				res.statusCode = 400;
+				res.json({message: "Did you enter a name and email for this user?", data: err});
+				//potential add error for duplicate email?
+					//if so console.log the error and go through its properties
+			}
+			else{
+				res.statusCode = 500;
+				res.json({message: "The server had an error.", data: err})
+			}
+		}
+		else{
+			res.statusCode = 201;
+			res.json({message: "User Created", data: post});
+		}
+	});
+});
+userRoute.options(function(req, res){
+	res.writeHead(200);
+	res.end();
+});
+//Single User Route Get put delete
+singleUserRoute.get(function(req, res, next){
+	User.findById(req.params.id, function(err, post){
+		if (!post){ //user not found
+			res.statusCode = 404;
+			res.send({message : "The user you were looking for does not exist.", data: post});
+		}
+		else if (err){
+			res.statusCode = 500;
+			res.send({message: "The server encountered an error.", data: err});
+		}
+		else{
+			res.statusCode = 200;
+			res.json({message: "OK", data: post});
+		}
+	});
+});
+singleUserRoute.put(function(req, res, next){
+	User.findByIdAndUpdate(req.params.id, req.body, function(err, post){
+		if (!post){
+			res.statusCode = 404;
+			res.send({message : "The user you were looking for does not exist.", data: post});
+		}
+		else if (err){
+			if (err.name = 'ValidationError'){
+				res.statusCode = 400;
+				res.send({message : "Does your update include a name and email for the user?", data: post});
+			}
+			else{
+				res.statusCode = 500;
+				res.send({message: "The server encountered an error.", data: err});
+			}
+		}
+		else{
+			res.statusCode = 201;
+		 	res.json({message: "User Updated", data: post});
+		}
+	});
+});
+singleUserRoute.delete(function(req, res, next){
+	User.findByIdAndRemove(req.params.id, req.body, function(err, post){
+		if (!post){
+			res.statusCode = 404;
+			res.json({message: "User not found", data: post});
+		}
+		if (err){
+			res.statusCode = 500;
+			res.json({message : "The server encountered an error.", data: err});
+		}
+		else {
+			res.statusCode = 200;
+			res.json({message : "User Deleted", data : post});
+		}
+	});
+});
+//Tasks get post options
+taskRoute.get(function(req, res, next){
+	Task.find(function(err, tasks){
+		
+		var where = null;
+		if (req.query.where) where = JSON.parse(req.query.where);
+		var sort = null;
+		if (req.query.sort) sort = JSON.parse(req.query.sort);
+		var select = null;
+		if (req.query.select) select = JSON.parse(req.query.select);
 
-//Add more routes here
+		var count = "false";
+		if (req.query.count) count = JSON.parse(req.query.count);
 
+		var done = Task.find(where, select).sort(sort).skip(req.query.skip).limit(req.query.limit);
+		if (count === "true")
+			done = done.count();
+
+		done.exec(function(err, tasks){
+			if (err){
+				res.statusCode = 500;
+				res.send({message : "The server had an error!", data: err});
+			}
+			else{
+				res.statusCode = 200;
+				res.json({message: "OK", data: tasks});
+			}
+		});
+
+	});
+});
+taskRoute.post(function(req, res, next){
+	Task.create(req.body, function(err,post){
+		if (err){
+				if (err.name = 'ValidationError'){
+					res.statusCode = 400;
+					res.json({message: "Did you enter a name and deadline for this task?", data: err});
+					//potential add error for duplicate email?
+						//if so console.log the error and go through its properties
+				}
+				else{
+					res.statusCode = 500;
+					res.json({message: "The server had an error.", data: err})
+				}
+			}
+			else{
+				res.statusCode = 201;
+				res.json({message: "Task Created", data: post});
+			}
+		});
+});
+taskRoute.options(function(req, res){
+	res.writeHead(200);
+	res.end();
+});
+//single task get put delete
+singleTaskRoute.get(function(req,res,next){
+	Task.findById(req.params.id, function(err, post){
+		if (!post){ //user not found
+			res.statusCode = 404;
+			res.send({message : "The task you were looking for does not exist.", data: post});
+		}
+		else if (err){
+			res.statusCode = 500;
+			res.send({message: "The server encountered an error.", data: err});
+		}
+		else{
+			res.statusCode = 200;
+			res.json({message: "OK", data: post});
+		}
+	});
+});
+singleTaskRoute.put(function(req, res, next){
+	Task.findByIdAndUpdate(req.params.id, req.body, function(err, post){
+		if (!post){
+			res.statusCode = 404;
+			res.send({message : "The task you were looking for does not exist.", data: post});
+		}
+		else if (err){
+			if (err.name = 'ValidationError'){
+				res.statusCode = 400;
+				res.send({message : "Does your update include a name and deadline for the task?", data: post});
+			}
+			else{
+				res.statusCode = 500;
+				res.send({message: "The server encountered an error.", data: err});
+			}
+		}
+		else{
+			res.statusCode = 201;
+		 	res.json({message: "Task Updated", data: post});
+		}
+	});
+});
+singleTaskRoute.delete(function(req, res, next){
+	Task.findByIdAndRemove(req.params.id, req.body, function(err, post){
+		if (!post){
+			res.statusCode = 404;
+			res.json({message: "Task not found", data: post});
+		}
+		if (err){
+			res.statusCode = 500;
+			res.json({message : "The server encountered an error.", data: err});
+		}
+		else {
+			res.statusCode = 200;
+			res.json({message : "Task Deleted", data : post});
+		}
+	});
+});
 // Start the server
 app.listen(port);
 console.log('Server running on port ' + port); 
