@@ -20,13 +20,16 @@
 
 Todo:
 Part A:
-	Do stuff for taskroute and check!
-	more validation?
-
+	test
+	get duplicate email working
 
 Part B:
-	1. Settings- done
-	2. 
-
+	radio bttons for task view
+	next and prev buttons for task view all with scope.watch
 Questions:
 	what data must we send back if user not found in error? (404)
+	check error messages
+
+	part b: 
+		post method not working with mine...
+
