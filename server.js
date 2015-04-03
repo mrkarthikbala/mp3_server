@@ -28,7 +28,7 @@ app.use(allowCrossDomain);
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-
+//app.use(bodyParser.json());
 // All our routes will start with /api
 app.use('/api', router);
 
@@ -75,10 +75,9 @@ userRoute.get(function(req, res, next){
 	});
 });
 userRoute.post(function(req, res,next){
-	console.log(req.body);
 	User.create(req.body, function(err, post){
 		if (err){
-			if (err.name = 'ValidationError'){
+			if (err.name === 'ValidationError'){
 				res.statusCode = 400;
 				res.json({message: "Did you enter a name and email for this user?", data: err});
 				//potential add error for duplicate email?
@@ -123,7 +122,7 @@ singleUserRoute.put(function(req, res, next){
 			res.send({message : "The user you were looking for does not exist.", data: post});
 		}
 		else if (err){
-			if (err.name = 'ValidationError'){
+			if (err.name === 'ValidationError'){
 				res.statusCode = 400;
 				res.send({message : "Does your update include a name and email for the user?", data: post});
 			}
@@ -188,7 +187,7 @@ taskRoute.get(function(req, res, next){
 taskRoute.post(function(req, res, next){
 	Task.create(req.body, function(err,post){
 		if (err){
-				if (err.name = 'ValidationError'){
+				if (err.name === 'ValidationError'){
 					res.statusCode = 400;
 					res.json({message: "Did you enter a name and deadline for this task?", data: err});
 					//potential add error for duplicate email?
@@ -233,7 +232,7 @@ singleTaskRoute.put(function(req, res, next){
 			res.send({message : "The task you were looking for does not exist.", data: post});
 		}
 		else if (err){
-			if (err.name = 'ValidationError'){
+			if (err.name === 'ValidationError'){
 				res.statusCode = 400;
 				res.send({message : "Does your update include a name and deadline for the task?", data: post});
 			}
