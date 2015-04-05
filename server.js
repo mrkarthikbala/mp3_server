@@ -28,7 +28,7 @@ app.use(allowCrossDomain);
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-//app.use(bodyParser.json());
+app.use(bodyParser.json());
 // All our routes will start with /api
 app.use('/api', router);
 
@@ -75,6 +75,7 @@ userRoute.get(function(req, res, next){
 	});
 });
 userRoute.post(function(req, res,next){
+	console.log(req.body);
 	User.create(req.body, function(err, post){
 		if (err){
 			if (err.name === 'ValidationError'){
