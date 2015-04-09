@@ -132,7 +132,7 @@ singleUserRoute.put(function(req, res, next){
 			}
 		}
 		else{
-			res.statusCode = 201;
+			res.statusCode = 200;
 		 	res.json({message: "User Updated", data: post});
 		}
 	});
@@ -242,7 +242,7 @@ singleTaskRoute.put(function(req, res, next){
 			}
 		}
 		else{
-			res.statusCode = 201;
+			res.statusCode = 200;
 		 	res.json({message: "Task Updated", data: post});
 		}
 	});
