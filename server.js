@@ -75,7 +75,6 @@ userRoute.get(function(req, res, next){
 	});
 });
 userRoute.post(function(req, res,next){
-	console.log(req.body);
 	User.create(req.body, function(err, post){
 		if (err){
 			if (err.name === 'ValidationError'){
