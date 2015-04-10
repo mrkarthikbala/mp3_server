@@ -16,11 +16,11 @@ var app = express();
 var port = process.env.PORT || 4000;
 
 //Allow CORS so that backend and frontend could pe put on different servers
-var allowCrossDomain = function(req, res) {
+var allowCrossDomain = function(req, res,next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
   res.header('Access-Control-Allow-Methods', "GET, POST, PUT, DELETE, OPTIONS");
-  //next();
+  next();
 };
 app.use(allowCrossDomain);
 
@@ -47,7 +47,7 @@ var singleUserRoute = router.route('/users/:id');
 var taskRoute = router.route('/tasks');
 var singleTaskRoute = router.route('/tasks/:id');
 
-userRoute.get(function(req, res, next){
+userRoute.get(function(req, res){
 
 	var where = null;
 	if (req.query.where) where = JSON.parse(req.query.where);
@@ -74,7 +74,7 @@ userRoute.get(function(req, res, next){
 		}
 	});
 });
-userRoute.post(function(req, res,next){
+userRoute.post(function(req, res){
 	User.create(req.body, function(err, post){
 		if (err){
 			if (err.name === 'ValidationError'){
