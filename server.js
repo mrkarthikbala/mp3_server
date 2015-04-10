@@ -16,7 +16,7 @@ var app = express();
 var port = process.env.PORT || 4000;
 
 //Allow CORS so that backend and frontend could pe put on different servers
-var allowCrossDomain = function(req, res, next) {
+var allowCrossDomain = function(req, res) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept");
   res.header('Access-Control-Allow-Methods', "GET, POST, PUT, DELETE, OPTIONS");
@@ -100,7 +100,7 @@ userRoute.options(function(req, res){
 	res.status(200).end();
 });
 //Single User Route Get put delete
-singleUserRoute.get(function(req, res, next){
+singleUserRoute.get(function(req, res){
 	User.findById(req.params.id, function(err, post){
 		if (!post){ //user not found
 			//res.statusCode = 404;
@@ -116,7 +116,7 @@ singleUserRoute.get(function(req, res, next){
 		}
 	});
 });
-singleUserRoute.put(function(req, res, next){
+singleUserRoute.put(function(req, res){
 	User.findByIdAndUpdate(req.params.id, req.body, function(err, post){
 		if (!post){
 			//res.statusCode = 404;
@@ -138,7 +138,7 @@ singleUserRoute.put(function(req, res, next){
 		}
 	});
 });
-singleUserRoute.delete(function(req, res, next){
+singleUserRoute.delete(function(req, res){
 	User.findByIdAndRemove(req.params.id, req.body, function(err, post){
 		if (!post){
 			//res.statusCode = 404;
@@ -155,7 +155,7 @@ singleUserRoute.delete(function(req, res, next){
 	});
 });
 //Tasks get post options
-taskRoute.get(function(req, res, next){
+taskRoute.get(function(req, res){
 	Task.find(function(err, tasks){
 		
 		var where = null;
@@ -185,7 +185,7 @@ taskRoute.get(function(req, res, next){
 
 	});
 });
-taskRoute.post(function(req, res, next){
+taskRoute.post(function(req, res){
 	Task.create(req.body, function(err,post){
 		if (err){
 				if (err.name === 'ValidationError'){
@@ -211,7 +211,7 @@ taskRoute.options(function(req, res){
 	res.status(200).end();
 });
 //single task get put delete
-singleTaskRoute.get(function(req,res,next){
+singleTaskRoute.get(function(req,res){
 	Task.findById(req.params.id, function(err, post){
 		if (!post){ //user not found
 			//res.statusCode = 404;
@@ -227,7 +227,7 @@ singleTaskRoute.get(function(req,res,next){
 		}
 	});
 });
-singleTaskRoute.put(function(req, res, next){
+singleTaskRoute.put(function(req, res){
 	Task.findByIdAndUpdate(req.params.id, req.body, function(err, post){
 		if (!post){
 		//	res.statusCode = 404;
@@ -249,7 +249,7 @@ singleTaskRoute.put(function(req, res, next){
 		}
 	});
 });
-singleTaskRoute.delete(function(req, res, next){
+singleTaskRoute.delete(function(req, res){
 	Task.findByIdAndRemove(req.params.id, req.body, function(err, post){
 		if (!post){
 			//res.statusCode = 404;
