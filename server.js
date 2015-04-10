@@ -95,10 +95,10 @@ userRoute.post(function(req, res,next){
 	});
 });
 userRoute.options(function(req, res){
-	res.writeHead(200);
+	//res.writeHead(200);
 	//res.statusCode = 200;
-	//res.status(200).end();
-	res.end();
+	res.status(200).end();
+	//res.end();
 });
 //Single User Route Get put delete
 singleUserRoute.get(function(req, res, next){
@@ -208,9 +208,9 @@ taskRoute.post(function(req, res, next){
 });
 taskRoute.options(function(req, res){
 	//res.statusCode = 200;
-	//res.status(200).end();
-	res.writeHead(200);
-	res.end();
+	res.status(200).end();
+	//res.writeHead(200);
+	//res.end();
 });
 //single task get put delete
 singleTaskRoute.get(function(req,res,next){
