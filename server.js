@@ -67,10 +67,12 @@ userRoute.get(function(req, res){
 		if (err){
 			//res.statusCode = 500;
 			res.status(500).send({message : "The server had an error!", data: err});
+			return;
 		}
 		else{
 			//res.statusCode = 200;
 			res.status(200).json({message: "OK", data: users});
+			return;
 		}
 	});
 });
@@ -80,17 +82,20 @@ userRoute.post(function(req, res){
 			if (err.name === 'ValidationError'){
 				//res.statusCode = 400;
 				res.status(400).json({message: "Did you enter a name and email for this user?", data: err});
+				return;
 				//potential add error for duplicate email?
 					//if so console.log the error and go through its properties
 			}
 			else{
 				//res.statusCode = 500;
 				res.status(500).json({message: "The server had an error.", data: err});
+				return;
 			}
 		}
 		else{
 			//res.statusCode = 201;
 			res.status(201).json({message: "User Created", data: post});
+			return;
 		}
 	});
 });
@@ -105,14 +110,17 @@ singleUserRoute.get(function(req, res){
 		if (!post){ //user not found
 			//res.statusCode = 404;
 			res.status(404).send({message : "The user you were looking for does not exist.", data: post});
+			return;
 		}
 		else if (err){
 			//res.statusCode = 500;
 			res.status(500).send({message: "The server encountered an error.", data: err});
+			return;
 		}
 		else{
 			//res.statusCode = 200;
 			res.status(200).json({message: "OK", data: post});
+			return;
 		}
 	});
 });
@@ -121,20 +129,24 @@ singleUserRoute.put(function(req, res){
 		if (!post){
 			//res.statusCode = 404;
 			res.status(404).send({message : "The user you were looking for does not exist.", data: post});
+			return;
 		}
 		else if (err){
 			if (err.name === 'ValidationError'){
 				//res.statusCode = 400;
 				res.status(400).send({message : "Does your update include a name and email for the user?", data: post});
+				return;
 			}
 			else{
 				//res.statusCode = 500;
 				res.status(500).send({message: "The server encountered an error.", data: err});
+				return;
 			}
 		}
 		else{
 			//res.statusCode = 200;
 		 	res.status(200).json({message: "User Updated", data: post});
+		 	return;
 		}
 	});
 });
@@ -143,14 +155,17 @@ singleUserRoute.delete(function(req, res){
 		if (!post){
 			//res.statusCode = 404;
 			res.status(404).json({message: "User not found", data: post});
+			return;
 		}
-		if (err){
+		else if (err){
 			//res.statusCode = 500;
 			res.status(500).json({message : "The server encountered an error.", data: err});
+			return;
 		}
 		else {
 			//res.statusCode = 200;
 			res.status(200).json({message : "User Deleted", data : post});
+			return;
 		}
 	});
 });
@@ -176,10 +191,12 @@ taskRoute.get(function(req, res){
 			if (err){
 				//res.statusCode = 500;
 				res.status(500).send({message : "The server had an error!", data: err});
+				return;
 			}
 			else{
 				//res.statusCode = 200;
 				res.status(200).json({message: "OK", data: tasks});
+				return;
 			}
 		});
 
@@ -191,17 +208,20 @@ taskRoute.post(function(req, res){
 				if (err.name === 'ValidationError'){
 					//res.statusCode = 400;
 					res.status(400).json({message: "Did you enter a name and deadline for this task?", data: err});
+					return;
 					//potential add error for duplicate email?
 						//if so console.log the error and go through its properties
 				}
 				else{
 					//res.statusCode = 500;
-					res.status(500).json({message: "The server had an error.", data: err})
+					res.status(500).json({message: "The server had an error.", data: err});
+					return;
 				}
 			}
 			else{
 				//res.statusCode = 201;
 				res.status(201).json({message: "Task Created", data: post});
+				return;
 			}
 		});
 });
@@ -216,14 +236,17 @@ singleTaskRoute.get(function(req,res){
 		if (!post){ //user not found
 			//res.statusCode = 404;
 			res.status(404).send({message : "The task you were looking for does not exist.", data: post});
+			return;
 		}
 		else if (err){
 			//res.statusCode = 500;
 			res.status(500).send({message: "The server encountered an error.", data: err});
+			return;
 		}
 		else{
 			//res.statusCode = 200;
 			res.status(200).json({message: "OK", data: post});
+			return;
 		}
 	});
 });
@@ -232,20 +255,25 @@ singleTaskRoute.put(function(req, res){
 		if (!post){
 		//	res.statusCode = 404;
 			res.status(404).send({message : "The task you were looking for does not exist.", data: post});
+			return;
 		}
+
 		else if (err){
 			if (err.name === 'ValidationError'){
 			//	res.statusCode = 400;
 				res.status(400).send({message : "Does your update include a name and deadline for the task?", data: post});
+				return;
 			}
 			else{
 				//res.statusCode = 500;
 				res.status(500).send({message: "The server encountered an error.", data: err});
+				return;
 			}
 		}
 		else{
 			//res.statusCode = 200;
 		 	res.status(200).json({message: "Task Updated", data: post});
+		 	return;
 		}
 	});
 });
@@ -254,14 +282,17 @@ singleTaskRoute.delete(function(req, res){
 		if (!post){
 			//res.statusCode = 404;
 			res.status(404).json({message: "Task not found", data: post});
+			return;
 		}
-		if (err){
+		else if (err){
 			//res.statusCode = 500;
 			res.status(500).json({message : "The server encountered an error.", data: err});
+			return;
 		}
 		else {
 		//	res.statusCode = 200;
 			res.status(200).json({message : "Task Deleted", data : post});
+			return;
 		}
 	});
 });
