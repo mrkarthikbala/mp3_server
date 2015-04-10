@@ -164,7 +164,7 @@ singleUserRoute.delete(function(req, res){
 		}
 		else {
 			//res.statusCode = 200;
-			res.status(200).json({message : "User Deleted", data : post});
+			res.status(200).json({message : "User Deleted", data : []});
 			return;
 		}
 	});
@@ -291,7 +291,7 @@ singleTaskRoute.delete(function(req, res){
 		}
 		else {
 		//	res.statusCode = 200;
-			res.status(200).json({message : "Task Deleted", data : post});
+			res.status(200).json({message : "Task Deleted", data : []});
 			return;
 		}
 	});
