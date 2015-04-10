@@ -109,7 +109,7 @@ singleUserRoute.get(function(req, res){
 	User.findById(req.params.id, function(err, post){
 		if (!post){ //user not found
 			//res.statusCode = 404;
-			res.status(404).send({message : "The user you were looking for does not exist.", data: post});
+			res.status(404).send({message : "The user you were looking for does not exist.", data: []});
 			return;
 		}
 		else if (err){
@@ -128,7 +128,7 @@ singleUserRoute.put(function(req, res){
 	User.findByIdAndUpdate(req.params.id, req.body, function(err, post){
 		if (!post){
 			//res.statusCode = 404;
-			res.status(404).send({message : "The user you were looking for does not exist.", data: post});
+			res.status(404).send({message : "The user you were looking for does not exist.", data: []});
 			return;
 		}
 		else if (err){
@@ -154,7 +154,7 @@ singleUserRoute.delete(function(req, res){
 	User.findByIdAndRemove(req.params.id, req.body, function(err, post){
 		if (!post){
 			//res.statusCode = 404;
-			res.status(404).json({message: "User not found", data: post});
+			res.status(404).json({message: "User not found", data: []});
 			return;
 		}
 		else if (err){
@@ -235,7 +235,7 @@ singleTaskRoute.get(function(req,res){
 	Task.findById(req.params.id, function(err, post){
 		if (!post){ //user not found
 			//res.statusCode = 404;
-			res.status(404).send({message : "The task you were looking for does not exist.", data: post});
+			res.status(404).send({message : "The task you were looking for does not exist.", data: []});
 			return;
 		}
 		else if (err){
@@ -254,7 +254,7 @@ singleTaskRoute.put(function(req, res){
 	Task.findByIdAndUpdate(req.params.id, req.body, function(err, post){
 		if (!post){
 		//	res.statusCode = 404;
-			res.status(404).send({message : "The task you were looking for does not exist.", data: post});
+			res.status(404).send({message : "The task you were looking for does not exist.", data: []});
 			return;
 		}
 
@@ -281,7 +281,7 @@ singleTaskRoute.delete(function(req, res){
 	Task.findByIdAndRemove(req.params.id, req.body, function(err, post){
 		if (!post){
 			//res.statusCode = 404;
-			res.status(404).json({message: "Task not found", data: post});
+			res.status(404).json({message: "Task not found", data: []});
 			return;
 		}
 		else if (err){
