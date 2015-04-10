@@ -65,12 +65,12 @@ userRoute.get(function(req, res, next){
 
 	done.exec(function(err, users){
 		if (err){
-			res.statusCode = 500;
-			res.send({message : "The server had an error!", data: err});
+			//res.statusCode = 500;
+			res.status(500).send({message : "The server had an error!", data: err});
 		}
 		else{
-			res.statusCode = 200;
-			res.json({message: "OK", data: users});
+			//res.statusCode = 200;
+			res.status(200).json({message: "OK", data: users});
 		}
 	});
 });
@@ -78,78 +78,80 @@ userRoute.post(function(req, res,next){
 	User.create(req.body, function(err, post){
 		if (err){
 			if (err.name === 'ValidationError'){
-				res.statusCode = 400;
-				res.json({message: "Did you enter a name and email for this user?", data: err});
+				//res.statusCode = 400;
+				res.status(400).json({message: "Did you enter a name and email for this user?", data: err});
 				//potential add error for duplicate email?
 					//if so console.log the error and go through its properties
 			}
 			else{
-				res.statusCode = 500;
-				res.json({message: "The server had an error.", data: err})
+				//res.statusCode = 500;
+				res.status(500).json({message: "The server had an error.", data: err});
 			}
 		}
 		else{
-			res.statusCode = 201;
-			res.json({message: "User Created", data: post});
+			//res.statusCode = 201;
+			res.status(201).json({message: "User Created", data: post});
 		}
 	});
 });
 userRoute.options(function(req, res){
-	//res.writeHead(200);
+	res.writeHead(200);
+	//res.statusCode = 200;
+	//res.status(200).end();
 	res.end();
 });
 //Single User Route Get put delete
 singleUserRoute.get(function(req, res, next){
 	User.findById(req.params.id, function(err, post){
 		if (!post){ //user not found
-			res.statusCode = 404;
-			res.send({message : "The user you were looking for does not exist.", data: post});
+			//res.statusCode = 404;
+			res.status(404).send({message : "The user you were looking for does not exist.", data: post});
 		}
 		else if (err){
-			res.statusCode = 500;
-			res.send({message: "The server encountered an error.", data: err});
+			//res.statusCode = 500;
+			res.status(500).send({message: "The server encountered an error.", data: err});
 		}
 		else{
-			res.statusCode = 200;
-			res.json({message: "OK", data: post});
+			//res.statusCode = 200;
+			res.status(200).json({message: "OK", data: post});
 		}
 	});
 });
 singleUserRoute.put(function(req, res, next){
 	User.findByIdAndUpdate(req.params.id, req.body, function(err, post){
 		if (!post){
-			res.statusCode = 404;
-			res.send({message : "The user you were looking for does not exist.", data: post});
+			//res.statusCode = 404;
+			res.status(404).send({message : "The user you were looking for does not exist.", data: post});
 		}
 		else if (err){
 			if (err.name === 'ValidationError'){
-				res.statusCode = 400;
-				res.send({message : "Does your update include a name and email for the user?", data: post});
+				//res.statusCode = 400;
+				res.status(400).send({message : "Does your update include a name and email for the user?", data: post});
 			}
 			else{
-				res.statusCode = 500;
-				res.send({message: "The server encountered an error.", data: err});
+				//res.statusCode = 500;
+				res.status(500).send({message: "The server encountered an error.", data: err});
 			}
 		}
 		else{
-			res.statusCode = 200;
-		 	res.json({message: "User Updated", data: post});
+			//res.statusCode = 200;
+		 	res.status(200).json({message: "User Updated", data: post});
 		}
 	});
 });
 singleUserRoute.delete(function(req, res, next){
 	User.findByIdAndRemove(req.params.id, req.body, function(err, post){
 		if (!post){
-			res.statusCode = 404;
-			res.json({message: "User not found", data: post});
+			//res.statusCode = 404;
+			res.status(404).json({message: "User not found", data: post});
 		}
 		if (err){
-			res.statusCode = 500;
-			res.json({message : "The server encountered an error.", data: err});
+			//res.statusCode = 500;
+			res.status(500).json({message : "The server encountered an error.", data: err});
 		}
 		else {
-			res.statusCode = 200;
-			res.json({message : "User Deleted", data : post});
+			//res.statusCode = 200;
+			res.status(200).json({message : "User Deleted", data : post});
 		}
 	});
 });
@@ -173,12 +175,12 @@ taskRoute.get(function(req, res, next){
 
 		done.exec(function(err, tasks){
 			if (err){
-				res.statusCode = 500;
-				res.send({message : "The server had an error!", data: err});
+				//res.statusCode = 500;
+				res.status(500).send({message : "The server had an error!", data: err});
 			}
 			else{
-				res.statusCode = 200;
-				res.json({message: "OK", data: tasks});
+				//res.statusCode = 200;
+				res.status(200).json({message: "OK", data: tasks});
 			}
 		});
 
@@ -188,79 +190,80 @@ taskRoute.post(function(req, res, next){
 	Task.create(req.body, function(err,post){
 		if (err){
 				if (err.name === 'ValidationError'){
-					res.statusCode = 400;
-					res.json({message: "Did you enter a name and deadline for this task?", data: err});
+					//res.statusCode = 400;
+					res.status(400).json({message: "Did you enter a name and deadline for this task?", data: err});
 					//potential add error for duplicate email?
 						//if so console.log the error and go through its properties
 				}
 				else{
-					res.statusCode = 500;
-					res.json({message: "The server had an error.", data: err})
+					//res.statusCode = 500;
+					res.status(500).json({message: "The server had an error.", data: err})
 				}
 			}
 			else{
-				res.statusCode = 201;
-				res.json({message: "Task Created", data: post});
+				//res.statusCode = 201;
+				res.status(201).json({message: "Task Created", data: post});
 			}
 		});
 });
 taskRoute.options(function(req, res){
-	//res.writeHead(200);
-	res.statusCode = 200;
+	//res.statusCode = 200;
+	//res.status(200).end();
+	res.writeHead(200);
 	res.end();
 });
 //single task get put delete
 singleTaskRoute.get(function(req,res,next){
 	Task.findById(req.params.id, function(err, post){
 		if (!post){ //user not found
-			res.statusCode = 404;
-			res.send({message : "The task you were looking for does not exist.", data: post});
+			//res.statusCode = 404;
+			res.status(404).send({message : "The task you were looking for does not exist.", data: post});
 		}
 		else if (err){
-			res.statusCode = 500;
-			res.send({message: "The server encountered an error.", data: err});
+			//res.statusCode = 500;
+			res.status(500).send({message: "The server encountered an error.", data: err});
 		}
 		else{
-			res.statusCode = 200;
-			res.json({message: "OK", data: post});
+			//res.statusCode = 200;
+			res.status(200).json({message: "OK", data: post});
 		}
 	});
 });
 singleTaskRoute.put(function(req, res, next){
 	Task.findByIdAndUpdate(req.params.id, req.body, function(err, post){
 		if (!post){
-			res.statusCode = 404;
-			res.send({message : "The task you were looking for does not exist.", data: post});
+			//res.statusCode = 404;
+			res.status(404).send({message : "The task you were looking for does not exist.", data: post});
 		}
 		else if (err){
 			if (err.name === 'ValidationError'){
-				res.statusCode = 400;
-				res.send({message : "Does your update include a name and deadline for the task?", data: post});
+				//res.statusCode = 400;
+				res.status(400).send({message : "Does your update include a name and deadline for the task?", data: post});
 			}
 			else{
-				res.statusCode = 500;
-				res.send({message: "The server encountered an error.", data: err});
+			//	res.statusCode = 500;
+				res.status(500).send({message: "The server encountered an error.", data: err});
 			}
 		}
 		else{
-			res.statusCode = 200;
-		 	res.json({message: "Task Updated", data: post});
+			//res.statusCode = 200;
+		 	res.status(200).json({message: "Task Updated", data: post});
 		}
 	});
 });
 singleTaskRoute.delete(function(req, res, next){
 	Task.findByIdAndRemove(req.params.id, req.body, function(err, post){
 		if (!post){
-			res.statusCode = 404;
-			res.json({message: "Task not found", data: post});
+			//res.statusCode = 404;
+			res.status(404).json({message: "Task not found", data: post});
 		}
 		if (err){
-			res.statusCode = 500;
-			res.json({message : "The server encountered an error.", data: err});
+			//res.statusCode = 500;
+			res.status(500).json({message : "The server encountered an error.", data: err});
 		}
 		else {
-			res.statusCode = 200;
-			res.json({message : "Task Deleted", data : post});
+			//res.statusCode = 200;
+			res.status(200).json({message : "Task Deleted", data : post});
 		}
 	});
 });
