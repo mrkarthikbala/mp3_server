@@ -95,7 +95,7 @@ userRoute.post(function(req, res,next){
 	});
 });
 userRoute.options(function(req, res){
-	res.writeHead(200);
+	//res.writeHead(200);
 	res.end();
 });
 //Single User Route Get put delete
@@ -206,6 +206,7 @@ taskRoute.post(function(req, res, next){
 });
 taskRoute.options(function(req, res){
 	//res.writeHead(200);
+	res.statusCode = 200;
 	res.end();
 });
 //single task get put delete
